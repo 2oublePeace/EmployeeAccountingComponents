@@ -1,7 +1,7 @@
 ﻿
-namespace OfficeVisualComponent
+namespace UserControlsApp
 {
-	partial class Form1
+	partial class FormMain
 	{
 		/// <summary>
 		/// Обязательная переменная конструктора.
@@ -29,13 +29,34 @@ namespace OfficeVisualComponent
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
+			this.treeViewControl = new OfficeVisualComponent.TreeViewControl();
+			this.SuspendLayout();
+			// 
+			// treeViewControl
+			// 
+			this.treeViewControl.Location = new System.Drawing.Point(12, 12);
+			this.treeViewControl.Name = "treeViewControl";
+			this.treeViewControl.Size = new System.Drawing.Size(206, 170);
+			this.treeViewControl.TabIndex = 0;
+			this.treeViewControl.Click += new System.EventHandler(this.button1_Click);
+			this.treeViewControl.MouseClick += new System.Windows.Forms.MouseEventHandler(this.treeViewControl_MouseClick);
+			this.treeViewControl.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.treeViewControl_MouseDoubleClick);
+			// 
+			// FormMain
+			// 
+			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(800, 450);
-			this.Text = "Form1";
+			this.Controls.Add(this.treeViewControl);
+			this.Name = "FormMain";
+			this.Text = "FormMain";
+			this.ResumeLayout(false);
+
 		}
 
 		#endregion
+
+		private OfficeVisualComponent.TreeViewControl treeViewControl;
 	}
 }
 

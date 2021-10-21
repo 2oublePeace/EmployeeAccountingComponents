@@ -12,21 +12,47 @@ namespace OfficeVisualComponent
 {
 	public partial class CheckedListBoxControl : UserControl
 	{
-		public object Items {
+		private event EventHandler selectedItemChanged;
+
+		public event EventHandler SelectedItemChanged
+		{
+			add { selectedItemChanged += value; }
+			remove { selectedItemChanged -= value; }
+		}
+
+		public object Items
+		{
 			get
 			{
 				return checkedListBox.Items;
 			}
-			set 
+			set
 			{
 				checkedListBox.DataSource = value;
-			} 
-		} 
+			}
+		}
+
+		public string SelectedItem
+		{
+			get
+			{
+				if (checkedListBox.SelectedItem != null)
+				{
+					return (string)checkedListBox.SelectedItem;
+				}
+				return null;
+			}
+		}
+
+		public void clear()
+		{
+			checkedListBox.Items.Clear();
+		}
 
 		public CheckedListBoxControl()
 		{
 			InitializeComponent();
-			
+			checkedListBox.SelectedValueChanged += selectedItemChanged;
 		}
 	}
 }

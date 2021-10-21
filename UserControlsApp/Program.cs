@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace OfficeVisualComponent
+namespace UserControlsApp
 {
 	static class Program
 	{
@@ -16,7 +16,7 @@ namespace OfficeVisualComponent
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new Form1());
+			Application.Run(new FormMain());
 		}
 	}
 }

@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31424.327
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficeVisualComponent", "OfficeVisualComponent\OfficeVisualComponent.csproj", "{9315681E-71C4-4E47-9DB0-159B7B74AB93}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficeVisualComponent", "OfficeVisualComponent\OfficeVisualComponent.csproj", "{5AC2014F-C4C0-4AB3-8F64-B4395B3E8BFD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserControlsApp", "UserControlsApp\UserControlsApp.csproj", "{C3435314-C6B1-4874-B4A8-B8CCCB04DB00}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9315681E-71C4-4E47-9DB0-159B7B74AB93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9315681E-71C4-4E47-9DB0-159B7B74AB93}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9315681E-71C4-4E47-9DB0-159B7B74AB93}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9315681E-71C4-4E47-9DB0-159B7B74AB93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5AC2014F-C4C0-4AB3-8F64-B4395B3E8BFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AC2014F-C4C0-4AB3-8F64-B4395B3E8BFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AC2014F-C4C0-4AB3-8F64-B4395B3E8BFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AC2014F-C4C0-4AB3-8F64-B4395B3E8BFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3435314-C6B1-4874-B4A8-B8CCCB04DB00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3435314-C6B1-4874-B4A8-B8CCCB04DB00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3435314-C6B1-4874-B4A8-B8CCCB04DB00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3435314-C6B1-4874-B4A8-B8CCCB04DB00}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
