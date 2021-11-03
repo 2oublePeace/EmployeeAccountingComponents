@@ -33,14 +33,10 @@ namespace OfficeVisualComponent
 
 			set
 			{
-				if (!isInitialized(minValue))
+				if (!isInitialized(minValue) || value >= minValue)
 				{
 					this.maxValue = value;
 				} 
-				else if (maxValue >= minValue)
-				{
-					this.maxValue = value;
-				}
 			}
 		}
 
@@ -53,11 +49,7 @@ namespace OfficeVisualComponent
 
 			set
 			{
-				if (!isInitialized(maxValue))
-				{
-					this.minValue = value;
-				}
-				else if (minValue <= maxValue)
+				if (!isInitialized(maxValue) || value <= maxValue)
 				{
 					this.minValue = value;
 				}
@@ -74,7 +66,7 @@ namespace OfficeVisualComponent
 					{
 						return value;
 					}
-					else
+					else if (value < minValue || value > maxValue && value != null)
 					{
 						MessageBox.Show("Число не входит в диапазон!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 						return null;
@@ -86,7 +78,7 @@ namespace OfficeVisualComponent
 					{
 						return value;
 					}
-					else
+					else if (value < minValue && value != null)
 					{
 						MessageBox.Show("Число не входит в диапазон!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 						return null;
@@ -98,7 +90,7 @@ namespace OfficeVisualComponent
 					{
 						return value;
 					}
-					else
+					else if (value > maxValue && value != null)
 					{
 						MessageBox.Show("Число не входит в диапазон!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 						return null;
@@ -114,25 +106,41 @@ namespace OfficeVisualComponent
 					if (value > minValue && value < maxValue && value != null)
 					{
 						this.value = (int)value;
+						numericUpDown.Value = (int)value;
+					} 
+					else
+					{
+						MessageBox.Show("Число не входит в диапазон!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					}
 				} 
-				else if(!isInitialized(maxValue) && value != null)
+				else if(!isInitialized(maxValue) && isInitialized(minValue) && value != null)
 				{
 					if(value > minValue)
 					{
 						this.value = (int)value;
+						numericUpDown.Value = (int)value;
+					}
+					else
+					{
+						MessageBox.Show("Число не входит в диапазон!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					}
 				} 
-				else if(!isInitialized(minValue) && value != null)
+				else if(!isInitialized(minValue) && isInitialized(maxValue) && value != null)
 				{
 					if (value < maxValue)
 					{
 						this.value = (int)value;
+						numericUpDown.Value = (int)value;
+					}
+					else
+					{
+						MessageBox.Show("Число не входит в диапазон!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					}
 				}
 				else if(value != null)
 				{
 					this.value = (int)value;
+					numericUpDown.Value = (int)value;
 				}
 			}
 		}
@@ -145,12 +153,22 @@ namespace OfficeVisualComponent
 
 		private bool isInitialized(int value)
 		{
-			return (Object.Equals(value, default(int))) ? false : true;
+			return (!Object.Equals(value, default(int)));
 		}
 
 		private bool isBounded()
 		{
-			return (isInitialized(minValue) && isInitialized(maxValue)) ? true : false;
+			return (isInitialized(minValue) && isInitialized(maxValue));
+		}
+
+		private void numericUpDown_ValueChanged(object sender, EventArgs e)
+		{
+			int? oldValue = Value;
+			Value = (int?)numericUpDown.Value;
+			if(Value == oldValue && Value != null)
+			{
+				numericUpDown.Value = (decimal)Value;
+			}
 		}
 	}
 }

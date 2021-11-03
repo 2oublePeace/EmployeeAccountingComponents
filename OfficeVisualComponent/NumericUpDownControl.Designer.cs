@@ -39,13 +39,14 @@ namespace OfficeVisualComponent
 			this.numericUpDown.Name = "numericUpDown";
 			this.numericUpDown.Size = new System.Drawing.Size(120, 20);
 			this.numericUpDown.TabIndex = 2;
+			this.numericUpDown.ValueChanged += new System.EventHandler(this.numericUpDown_ValueChanged);
 			// 
-			// TextBoxControl
+			// NumericUpDownControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.numericUpDown);
-			this.Name = "TextBoxControl";
+			this.Name = "NumericUpDownControl";
 			this.Size = new System.Drawing.Size(120, 20);
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown)).EndInit();
 			this.ResumeLayout(false);

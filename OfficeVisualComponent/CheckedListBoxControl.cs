@@ -40,11 +40,26 @@ namespace OfficeVisualComponent
 				{
 					return (string)checkedListBox.SelectedItem;
 				}
-				return null;
+				return "";
+			}
+
+			set
+			{
+				if (value != null)
+				{
+					foreach (string element in checkedListBox.Items)
+					{
+						if (element.Contains(value))
+						{
+							checkedListBox.SelectedItem = element;
+							break;
+						}
+					}
+				}
 			}
 		}
 
-		public void clear()
+		public void Clear()
 		{
 			checkedListBox.Items.Clear();
 		}

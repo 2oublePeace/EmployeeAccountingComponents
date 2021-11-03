@@ -19,7 +19,11 @@ namespace OfficeVisualComponent
 		{
 			get
 			{
-				return treeView.SelectedNode.Index;
+				if(treeView.SelectedNode != null)
+				{
+					return treeView.SelectedNode.Index;
+				}
+				return 0;
 			}
 			set
 			{

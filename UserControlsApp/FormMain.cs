@@ -22,6 +22,7 @@ namespace UserControlsApp
 				deliveryOffice = "Delivery",
 				officePhoneNumber = "89175563364"
 			});
+
 			treeViewControl.Add(new Delivery
 			{
 				fullName = "Emiryan Vladimir",
@@ -29,21 +30,38 @@ namespace UserControlsApp
 				officePhoneNumber = "89175567864"
 			});
 
+			List<string> list = new List<string> { "string1", "string2", "string3"};
+
+			checkedListBoxControl.Items = list;
+
+			numericControl.MaxValue = 10;
+			numericControl.MinValue = 1;
+			numericControl.Value = 5;
+		}
+
+		private void button3_Click(object sender, EventArgs e)
+		{
+			Console.WriteLine(checkedListBoxControl.SelectedItem);
+		}
+
+		private void button4_Click(object sender, EventArgs e)
+		{
+			checkedListBoxControl.SelectedItem = "string1";
 		}
 
 		private void button1_Click(object sender, EventArgs e)
 		{
-			Console.WriteLine(treeViewControl.SelectedBranch);
+			Console.WriteLine(treeViewControl.GetSelectedValue());
 		}
 
-		private void treeViewControl_MouseClick(object sender, MouseEventArgs e)
+		private void button2_Click(object sender, EventArgs e)
 		{
-			Console.WriteLine(treeViewControl.SelectedBranch);
+			Console.WriteLine(treeViewControl.SelectedIndex);
 		}
 
-		private void treeViewControl_MouseDoubleClick(object sender, MouseEventArgs e)
+		private void button3_Click_1(object sender, EventArgs e)
 		{
-			Console.WriteLine(treeViewControl.SelectedBranch);
+			treeViewControl.SelectedIndex = 1;
 		}
 	}
 }
