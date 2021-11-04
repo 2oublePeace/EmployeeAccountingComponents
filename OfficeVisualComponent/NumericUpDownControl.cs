@@ -13,6 +13,7 @@ namespace OfficeVisualComponent
 	public partial class NumericUpDownControl : UserControl
 	{
 		private int value;
+		private bool hasValue;
 		private int maxValue;
 		private int minValue;
 
@@ -66,37 +67,13 @@ namespace OfficeVisualComponent
 					{
 						return value;
 					}
-					else if (value < minValue || value > maxValue && value != null)
+					else if (value < minValue || value > maxValue)
 					{
 						MessageBox.Show("Число не входит в диапазон!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 						return null;
 					}
 				}
-				else if (!isInitialized(maxValue))
-				{
-					if (value > minValue)
-					{
-						return value;
-					}
-					else if (value < minValue && value != null)
-					{
-						MessageBox.Show("Число не входит в диапазон!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-						return null;
-					}
-				}
-				else if (!isInitialized(minValue))
-				{
-					if (value < maxValue)
-					{
-						return value;
-					}
-					else if (value > maxValue && value != null)
-					{
-						MessageBox.Show("Число не входит в диапазон!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-						return null;
-					}
-				}
-				return value;
+				return null;
 			}
 
 			set
@@ -114,33 +91,16 @@ namespace OfficeVisualComponent
 					}
 				} 
 				else if(!isInitialized(maxValue) && isInitialized(minValue) && value != null)
-				{
-					if(value > minValue)
-					{
-						this.value = (int)value;
-						numericUpDown.Value = (int)value;
-					}
-					else
-					{
-						MessageBox.Show("Число не входит в диапазон!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-					}
+				{		
+					MessageBox.Show("MaxValue не определен", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				} 
 				else if(!isInitialized(minValue) && isInitialized(maxValue) && value != null)
 				{
-					if (value < maxValue)
-					{
-						this.value = (int)value;
-						numericUpDown.Value = (int)value;
-					}
-					else
-					{
-						MessageBox.Show("Число не входит в диапазон!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-					}
+					MessageBox.Show("MinValue не определен", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
-				else if(value != null)
+				else if (!isInitialized(maxValue) && !isInitialized(minValue) && value != null)
 				{
-					this.value = (int)value;
-					numericUpDown.Value = (int)value;
+					MessageBox.Show("45454545 не определен", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			}
 		}
@@ -164,10 +124,17 @@ namespace OfficeVisualComponent
 		private void numericUpDown_ValueChanged(object sender, EventArgs e)
 		{
 			int? oldValue = Value;
-			Value = (int?)numericUpDown.Value;
-			if(Value == oldValue && Value != null)
+			if (isBounded()) 
+			{		
+				Value = (int?)numericUpDown.Value;
+				if (Value == oldValue && Value != null)
+				{
+					numericUpDown.Value = (decimal)Value;
+				}
+			}
+			else 
 			{
-				numericUpDown.Value = (decimal)Value;
+				numericUpDown.Value = default(int);
 			}
 		}
 	}

@@ -34,12 +34,12 @@ namespace UserControlsApp
 			this.buttonGetSelected = new System.Windows.Forms.Button();
 			this.buttonSetSelected = new System.Windows.Forms.Button();
 			this.buttonSetSelectedValue = new System.Windows.Forms.Button();
-			this.checkedListBoxControl = new OfficeVisualComponent.CheckedListBoxControl();
-			this.numericControl = new OfficeVisualComponent.NumericUpDownControl();
-			this.treeViewControl = new OfficeVisualComponent.TreeViewControl();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
+			this.checkedListBoxControl = new OfficeVisualComponent.CheckedListBoxControl();
+			this.numericControl = new OfficeVisualComponent.NumericUpDownControl();
+			this.treeViewControl = new OfficeVisualComponent.TreeViewControl();
 			this.SuspendLayout();
 			// 
 			// buttonGetSelectedValue
@@ -92,32 +92,6 @@ namespace UserControlsApp
 			this.buttonSetSelectedValue.UseVisualStyleBackColor = true;
 			this.buttonSetSelectedValue.Click += new System.EventHandler(this.button3_Click_1);
 			// 
-			// checkedListBoxControl
-			// 
-			this.checkedListBoxControl.Location = new System.Drawing.Point(12, 21);
-			this.checkedListBoxControl.Name = "checkedListBoxControl";
-			this.checkedListBoxControl.SelectedItem = "";
-			this.checkedListBoxControl.Size = new System.Drawing.Size(120, 94);
-			this.checkedListBoxControl.TabIndex = 5;
-			// 
-			// numericControl
-			// 
-			this.numericControl.Location = new System.Drawing.Point(12, 256);
-			this.numericControl.MaxValue = 0;
-			this.numericControl.MinValue = 0;
-			this.numericControl.Name = "numericControl";
-			this.numericControl.Size = new System.Drawing.Size(120, 20);
-			this.numericControl.TabIndex = 2;
-			this.numericControl.Value = 0;
-			// 
-			// treeViewControl
-			// 
-			this.treeViewControl.Location = new System.Drawing.Point(148, 21);
-			this.treeViewControl.Name = "treeViewControl";
-			this.treeViewControl.SelectedIndex = 0;
-			this.treeViewControl.Size = new System.Drawing.Size(206, 170);
-			this.treeViewControl.TabIndex = 0;
-			// 
 			// label1
 			// 
 			this.label1.AutoSize = true;
@@ -144,6 +118,32 @@ namespace UserControlsApp
 			this.label3.Size = new System.Drawing.Size(55, 13);
 			this.label3.TabIndex = 11;
 			this.label3.Text = "Tree View";
+			// 
+			// checkedListBoxControl
+			// 
+			this.checkedListBoxControl.Location = new System.Drawing.Point(12, 21);
+			this.checkedListBoxControl.Name = "checkedListBoxControl";
+			this.checkedListBoxControl.SelectedItem = "";
+			this.checkedListBoxControl.Size = new System.Drawing.Size(120, 94);
+			this.checkedListBoxControl.TabIndex = 5;
+			// 
+			// numericControl
+			// 
+			this.numericControl.Location = new System.Drawing.Point(12, 256);
+			this.numericControl.MaxValue = 4;
+			this.numericControl.MinValue = 0;
+			this.numericControl.Name = "numericControl";
+			this.numericControl.Size = new System.Drawing.Size(120, 20);
+			this.numericControl.TabIndex = 2;
+			this.numericControl.Value = null;
+			// 
+			// treeViewControl
+			// 
+			this.treeViewControl.Location = new System.Drawing.Point(148, 21);
+			this.treeViewControl.Name = "treeViewControl";
+			this.treeViewControl.SelectedIndex = 0;
+			this.treeViewControl.Size = new System.Drawing.Size(206, 170);
+			this.treeViewControl.TabIndex = 0;
 			// 
 			// FormMain
 			// 

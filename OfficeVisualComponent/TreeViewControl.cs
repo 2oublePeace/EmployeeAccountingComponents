@@ -39,11 +39,29 @@ namespace OfficeVisualComponent
 			}
 		}
 
-		public string GetSelectedValue()
+		public T GetSelectedValue<T>() where T : class, new()
 		{
 			if (treeView.SelectedNode.Nodes.Count == 0)
 			{
-				return treeView.SelectedNode.Text;
+				T obj = new T();
+				TreeNode level = treeView.SelectedNode;
+
+				Type type = typeof(T);
+				PropertyInfo[] properties = type.GetProperties();
+
+				for (int i = hierarchy.Count - 1; level != null && i >= 0; i--)
+				{
+					for (int j = properties.Length - 1; j >= 0; j--)
+					{
+						if (properties[j].Name == hierarchy[i])
+						{
+							properties[j].SetValue(obj, level.Text);
+							break;
+						}
+					}			
+					level = level.Parent;					
+				}
+				return obj;
 			}
 			else
 			{
@@ -61,7 +79,7 @@ namespace OfficeVisualComponent
 			this.hierarchy = hierarchy;
 		}
 
-		public void Add<T>(T obj) 
+		public void Add<T>(T obj, string endLevel) 
 		{
 			int levelCount = 0;
 			bool addNewNode = true;
@@ -72,33 +90,40 @@ namespace OfficeVisualComponent
 
 			foreach (var level in hierarchy)
 			{
-				foreach (var property in properties)
+				if(level != endLevel)
 				{
-					if(property.Name == level)
+					foreach (var property in properties)
 					{
-						if(levelCount > 0)
+						if (property.Name == level)
 						{
-							nodes = nodes[nodes.Count - 1].Nodes;
-						}
-
-						foreach(TreeNode node in nodes)
-						{
-							if(node.Text == property.GetValue(obj).ToString() && property.Name != "fullName")
+							if (levelCount > 0)
 							{
-								addNewNode = false;
+								nodes = nodes[nodes.Count - 1].Nodes;
 							}
-						}
 
-						if(addNewNode)
-						{
-							nodes.Add(new TreeNode(property.GetValue(obj).ToString()));
-						}
+							foreach (TreeNode node in nodes)
+							{
+								if (node.Text == property.GetValue(obj).ToString() && property.Name != "fullName")
+								{
+									addNewNode = false;
+								}
+							}
 
-						addNewNode = true;
-						break;
+							if (addNewNode)
+							{
+								nodes.Add(new TreeNode(property.GetValue(obj).ToString()));
+							}
+
+							addNewNode = true;
+							break;
+						}
 					}
+					levelCount++;
 				}
-				levelCount++;
+				else
+				{
+					break;
+				}
 			}
 		}
 	}

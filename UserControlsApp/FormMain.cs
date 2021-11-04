@@ -17,25 +17,31 @@ namespace UserControlsApp
 			InitializeComponent();
 			Delivery delivery = new Delivery();
 			treeViewControl.SetHierarchy(new List<string> { "fullName", "deliveryOffice", "officePhoneNumber" });
-			treeViewControl.Add(new Delivery { 
-				fullName = "Emiryan Vladimir", 
-				deliveryOffice = "Delivery",
-				officePhoneNumber = "89175563364"
-			});
+			treeViewControl.Add(
+				new Delivery { 
+					fullName = "Emiryan Vladimir", 
+					deliveryOffice = "Delivery",
+					officePhoneNumber = "89175563364"
+				},
+				""
+			);
 
-			treeViewControl.Add(new Delivery
-			{
-				fullName = "Emiryan Vladimir",
-				deliveryOffice = "Delivery",
-				officePhoneNumber = "89175567864"
-			});
+			treeViewControl.Add(
+				new Delivery
+				{
+					fullName = "Emiryan Vladimir",
+					deliveryOffice = "Delivery",
+					officePhoneNumber = "89175567864"
+				},
+				""
+			);
 
-			List<string> list = new List<string> { "string1", "string2", "string3"};
-
-			checkedListBoxControl.Items = list;
+			checkedListBoxControl.Items.Add("string1");
+			checkedListBoxControl.Items.Add("string2");
+			checkedListBoxControl.Items.Add("string3");
 
 			numericControl.MaxValue = 10;
-			numericControl.MinValue = 1;
+		    numericControl.MinValue = 1;
 			numericControl.Value = 5;
 		}
 
@@ -46,12 +52,12 @@ namespace UserControlsApp
 
 		private void button4_Click(object sender, EventArgs e)
 		{
-			checkedListBoxControl.SelectedItem = "string1";
+			checkedListBoxControl.SelectedItem = "string3";
 		}
 
 		private void button1_Click(object sender, EventArgs e)
 		{
-			Console.WriteLine(treeViewControl.GetSelectedValue());
+			Console.WriteLine(treeViewControl.GetSelectedValue<Delivery>());
 		}
 
 		private void button2_Click(object sender, EventArgs e)

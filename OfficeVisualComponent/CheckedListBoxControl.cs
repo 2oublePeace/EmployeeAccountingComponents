@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.CheckedListBox;
 
 namespace OfficeVisualComponent
 {
@@ -20,15 +21,13 @@ namespace OfficeVisualComponent
 			remove { selectedItemChanged -= value; }
 		}
 
-		public object Items
+		private ComboBox comboBox;
+
+		public ObjectCollection Items
 		{
 			get
 			{
 				return checkedListBox.Items;
-			}
-			set
-			{
-				checkedListBox.DataSource = value;
 			}
 		}
 
@@ -51,7 +50,7 @@ namespace OfficeVisualComponent
 					{
 						if (element.Contains(value))
 						{
-							checkedListBox.SelectedItem = element;
+							checkedListBox.SetItemChecked(checkedListBox.Items.IndexOf(element), true);
 							break;
 						}
 					}
@@ -68,6 +67,7 @@ namespace OfficeVisualComponent
 		{
 			InitializeComponent();
 			checkedListBox.SelectedValueChanged += selectedItemChanged;
+			comboBox = new ComboBox();
 		}
 	}
 }
