@@ -1,11 +1,8 @@
-﻿using System;
+﻿using OfficeNonVisualComponents;
+using OfficeNonVisualComponents.HelperModels;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace UserControlsApp
@@ -15,6 +12,7 @@ namespace UserControlsApp
 		public FormMain()
 		{
 			InitializeComponent();
+
 			Delivery delivery = new Delivery();
 			treeViewControl.SetHierarchy(new List<string> { "fullName", "deliveryOffice", "officePhoneNumber" });
 			treeViewControl.Add(
@@ -45,29 +43,83 @@ namespace UserControlsApp
 			numericControl.Value = 5;
 		}
 
-		private void button3_Click(object sender, EventArgs e)
+		private void buttonGetSelected_Click(object sender, EventArgs e)
 		{
 			Console.WriteLine(checkedListBoxControl.SelectedItem);
 		}
 
-		private void button4_Click(object sender, EventArgs e)
+		private void buttonSetSelected_Click(object sender, EventArgs e)
 		{
 			checkedListBoxControl.SelectedItem = "string3";
 		}
 
-		private void button1_Click(object sender, EventArgs e)
+		private void buttonGetSelectedValue_Click(object sender, EventArgs e)
 		{
 			Console.WriteLine(treeViewControl.GetSelectedValue<Delivery>());
 		}
 
-		private void button2_Click(object sender, EventArgs e)
+		private void buttonGetSelectedIndex_Click(object sender, EventArgs e)
 		{
 			Console.WriteLine(treeViewControl.SelectedIndex);
 		}
 
-		private void button3_Click_1(object sender, EventArgs e)
+		private void buttonSetSelectedValue_Click(object sender, EventArgs e)
 		{
 			treeViewControl.SelectedIndex = 1;
+		}
+
+		private void buttonWordImage_Click(object sender, EventArgs e)
+		{
+			string[] fileNames = null;
+
+			using (var dialog = new OpenFileDialog() { Filter = "Файлы изображений|*.bmp;*.png;*.jpg", Multiselect = true })
+			{
+				if (dialog.ShowDialog() == DialogResult.OK)
+				{
+					fileNames = dialog.FileNames;
+				}
+			}
+
+			using (var dialog = new SaveFileDialog { Filter = "docx|*.docx" })
+			{
+
+				if (dialog.ShowDialog() == DialogResult.OK && fileNames != null)
+				{
+					WordImageComponent.CreateDoc(dialog.FileName, "Изображения", fileNames);
+
+					MessageBox.Show("Создание прошло успешно!", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				}
+				else
+				{
+					MessageBox.Show("Ошибка!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				}
+			}
+		}
+
+		private void buttonWordTable_Click(object sender, EventArgs e)
+		{
+			using (var dialog = new SaveFileDialog { Filter = "docx|*.docx" })
+			{
+				Dictionary<(int, int), int> rowMergeUnfo = new Dictionary<(int, int), int>();
+				rowMergeUnfo.Add((0, 0), 4);
+				rowMergeUnfo.Add((6, 1), 2);
+
+				string[][] headers = new string[2][];
+				headers[0] = new string[] { "Доставщик" };
+				headers[1] = new string[] { "ФИО", "Офис", "Номер" };
+
+
+				if (dialog.ShowDialog() == DialogResult.OK)
+				{
+					WordTableComponent.CreateDoc(dialog.FileName, "Таблица", rowMergeUnfo);
+
+					MessageBox.Show("Создание прошло успешно!", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				}
+				else
+				{
+					MessageBox.Show("Ошибка!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				}
+			}
 		}
 	}
 }
