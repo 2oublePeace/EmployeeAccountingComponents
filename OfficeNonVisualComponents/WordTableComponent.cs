@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Reflection;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
@@ -9,6 +11,8 @@ namespace OfficeNonVisualComponents
 {
 	public partial class WordTableComponent : Component
 	{
+		private const int countHeadersColumns = 2;
+
 		public WordTableComponent()
 		{
 			InitializeComponent();
@@ -21,7 +25,8 @@ namespace OfficeNonVisualComponents
 			InitializeComponent();
 		}
 
-        public static void CreateDoc(string fileName, string title, Dictionary<(int, int), int> rowMergeInfo, Queue<string>[] headers)
+        public static void CreateDoc<T>(string fileName, string title, Dictionary<(int, int), int> rowMergeInfo, Dictionary<int, int> rowHeightnfo,
+			Queue<KeyValuePair<string, string>>[] headers, List<T> deliveries)
         {
             using (WordprocessingDocument wordDocument = WordprocessingDocument.Create(fileName, WordprocessingDocumentType.Document))
             {   
@@ -40,7 +45,9 @@ namespace OfficeNonVisualComponents
                     }
                 }));
 
-                Table table = CreateTable(3, 4, rowMergeInfo, headers);
+				CheckEnterData(deliveries);
+
+                Table table = CreateTable(3, countHeadersColumns + deliveries.Count, rowMergeInfo, rowHeightnfo, headers, deliveries);
 
                 body.AppendChild(table);
             }
@@ -62,7 +69,8 @@ namespace OfficeNonVisualComponents
 				{
 					Run docRun = new Run();
 
-					RunProperties properties = new RunProperties(); properties.AppendChild(new FontSize { Val = run.Item2.Size }); if (run.Item2.Bold)
+					RunProperties properties = new RunProperties(); properties.AppendChild(new FontSize { Val = run.Item2.Size }); 
+					if (run.Item2.Bold)
 					{
 						properties.AppendChild(new Bold());
 					}
@@ -112,7 +120,8 @@ namespace OfficeNonVisualComponents
 			return null;
 		}
 
-		private static Table CreateTable(int rowCount, int columnCount, Dictionary<(int, int), int> rowMergeInfo, Queue<string>[] headers)
+		private static Table CreateTable<T>(int rowCount, int columnCount, Dictionary<(int, int), int> rowMergeInfo, Dictionary<int, int> rowHeightnfo,
+			Queue<KeyValuePair<string, string>>[] headers, List<T> deliveries)
 		{
             Table table = new Table();
 
@@ -133,9 +142,14 @@ namespace OfficeNonVisualComponents
 			TableCell[] tableCells = new TableCell[columnCount];
 
 			Dictionary<int?, int?> rowMerge = new Dictionary<int?, int?>();
+			Dictionary<int, string> rowData = new Dictionary<int, string>();
 			for (int i = 0; i < tableRows.Length; i++)
 			{
 				tableRows[i] = new TableRow();
+				if(rowHeightnfo.ContainsKey(i))
+				{
+					tableRows[i].Append(new TableRowProperties(new TableRowHeight { Val = (uint)rowHeightnfo[i], HeightType = HeightRuleValues.Exact }));
+				}
 
 				for (int j = 0; j < tableCells.Length; j++)
 				{
@@ -152,7 +166,7 @@ namespace OfficeNonVisualComponents
 								tableCells[j].Append(new TableCellProperties(
 									new TableCellWidth() { Type = TableWidthUnitValues.Dxa, Width = "4800" },
 									new VerticalMerge { Val = MergedCellValues.Restart }));
-								tableCells[j].Append(new Paragraph(new Run(new Text(FillTableHead(j, headers[j])))));
+								tableCells[j].Append(new Paragraph(new Run(new Text(FillTableHead(i, headers[j], ref rowData)))));
 								skip = true;
 								break;
 							}
@@ -165,7 +179,7 @@ namespace OfficeNonVisualComponents
 								tableCells[j].Append(new TableCellProperties(
 									new TableCellWidth() { Type = TableWidthUnitValues.Dxa, Width = "4800" },
 									new VerticalMerge { Val = MergedCellValues.Continue }));
-								tableCells[j].Append(new Paragraph(new Run(new Text(FillTableHead(j, headers[j])))));
+								tableCells[j].Append(new Paragraph(new Run(new Text(FillTableHead(i, headers[j], ref rowData)))));
 								rowMerge[j]--;
 							}
 							else if (j == 0)
@@ -173,21 +187,21 @@ namespace OfficeNonVisualComponents
 								tableCells[j].Append(new TableCellProperties(
 									new TableCellWidth() { Type = TableWidthUnitValues.Dxa, Width = "4800" },
 									new HorizontalMerge { Val = MergedCellValues.Restart }));
-								tableCells[j].Append(new Paragraph(new Run(new Text(FillTableHead(j, headers[j])))));
+								tableCells[j].Append(new Paragraph(new Run(new Text(FillTableHead(i, headers[j], ref rowData)))));
 							}
 							else
 							{
 								tableCells[j].Append(new TableCellProperties(
 									new TableCellWidth() { Type = TableWidthUnitValues.Dxa, Width = "4800" },
 									new HorizontalMerge { Val = MergedCellValues.Continue }));
-								tableCells[j].Append(new Paragraph(new Run(new Text(FillTableHead(j, headers[j])))));
+								tableCells[j].Append(new Paragraph(new Run(new Text(FillTableHead(i, headers[j], ref rowData)))));
 							}
 						}
 					} 
 					else
 					{
 						tableCells[j].Append(new TableCellProperties(new TableCellWidth() { Type = TableWidthUnitValues.Dxa, Width = "4800" }));
-						tableCells[j].Append(new Paragraph(new Run(new Text())));
+						tableCells[j].Append(new Paragraph(new Run(new Text(FillTableData(i, j, deliveries, rowData)))));
 					}
 					
 					tableRows[i].Append(tableCells[j]);
@@ -198,14 +212,51 @@ namespace OfficeNonVisualComponents
 			return table;
         }
 
-		private static string FillTableHead(int index, Queue<string> headers)
+		private static string FillTableHead(int index, Queue<KeyValuePair<string, string>> headers, ref Dictionary<int, string> rowData)
 		{
 			if(headers.Count > 0)
 			{
-				return headers.Dequeue();
+				if(!rowData.ContainsKey(index) && headers.Peek().Value != null)
+				{
+					rowData.Add(index, headers.Peek().Value);
+				}
+				return headers.Dequeue().Key;
 			}
 
 			return string.Empty;
-		} 
-    }
+		}
+
+		private static string FillTableData<T>(int row, int column, List<T> deliveries, Dictionary<int, string> rowData)
+		{
+			Type type = typeof(T);
+			PropertyInfo[] properties = type.GetProperties();
+
+			foreach(PropertyInfo property in properties)
+			{
+				if(property.Name == rowData[row] && (column - countHeadersColumns) < deliveries.Count)
+				{
+					return property.GetValue(deliveries[column - countHeadersColumns]).ToString();
+				}
+			}
+
+			return string.Empty;
+		}
+
+		private static void CheckEnterData<T>(List<T> deliveries)
+		{
+			Type type = typeof(T);
+			PropertyInfo[] properties = type.GetProperties();
+
+			foreach (T item in deliveries)
+			{
+				foreach (PropertyInfo property in properties)
+				{
+					if (Equals(property.GetValue(item), null))
+					{
+						throw new Exception("Свойство было NULL!");
+					}
+				}
+			}
+		}
+	}
 }

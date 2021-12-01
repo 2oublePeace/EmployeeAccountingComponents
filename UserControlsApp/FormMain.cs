@@ -101,25 +101,38 @@ namespace UserControlsApp
 		{
 			using (var dialog = new SaveFileDialog { Filter = "docx|*.docx" })
 			{
-				Dictionary<(int, int), int> rowMergeUnfo = new Dictionary<(int, int), int>();
-				rowMergeUnfo.Add((0, 0), 2);
+				//Слияние ячеек
+				Dictionary<(int, int), int> rowMergeInfo = new Dictionary<(int, int), int>();
+				rowMergeInfo.Add((0, 0), 2);
 
-				Queue<string> firstColumn = new Queue<string>();
-				firstColumn.Enqueue("Доставка");
+				//Высота строк
+				Dictionary<int, int> rowHeightnfo = new Dictionary<int, int>();
+				rowHeightnfo.Add(2, 2000);
 
-				Queue<string> secondColumn = new Queue<string>();
-				secondColumn.Enqueue("Фио");
-				secondColumn.Enqueue("Офис");
-				secondColumn.Enqueue("Номер");
+				//Заголовки и присущие строкам данные
+				Queue<KeyValuePair<string, string>> firstColumn = new Queue<KeyValuePair<string, string>>();
+				firstColumn.Enqueue(new KeyValuePair<string, string>("Доставка", null));
 
-				Queue<string>[] headers = new Queue<string>[2];
+				Queue<KeyValuePair<string, string>> secondColumn = new Queue<KeyValuePair<string, string>>();
+				secondColumn.Enqueue(new KeyValuePair<string, string>("ФИО", "fullName"));
+				secondColumn.Enqueue(new KeyValuePair<string, string>("Офис", "deliveryOffice"));
+				secondColumn.Enqueue(new KeyValuePair<string, string>("Номер", "officePhoneNumber"));
+
+				Queue<KeyValuePair<string, string>>[] headers = new Queue<KeyValuePair<string, string>>[2];
 				headers[0] = firstColumn;
 				headers[1] = secondColumn;
+
+				//Данные для таблицы
+				List<Delivery> deliveries = new List<Delivery>();
+				deliveries.Add(new Delivery { fullName = "Emiryan Vladimir", deliveryOffice = "Delivery", officePhoneNumber = "89175563364" });
+				deliveries.Add(new Delivery { fullName = "Frolov Rafael", deliveryOffice = "DHL", officePhoneNumber = "89174333162" });
+				deliveries.Add(new Delivery { fullName = "Ivan Ivanov", deliveryOffice = "Express", officePhoneNumber = "89605326654" });
+			
 
 
 				if (dialog.ShowDialog() == DialogResult.OK)
 				{
-					WordTableComponent.CreateDoc(dialog.FileName, "Таблица", rowMergeUnfo, headers);
+					WordTableComponent.CreateDoc(dialog.FileName, "Таблица", rowMergeInfo, rowHeightnfo, headers, deliveries);
 
 					MessageBox.Show("Создание прошло успешно!", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				}
