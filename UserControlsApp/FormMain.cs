@@ -1,6 +1,7 @@
 ﻿using OfficeNonVisualComponents;
 using OfficeNonVisualComponents.HelperModels;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -101,17 +102,24 @@ namespace UserControlsApp
 			using (var dialog = new SaveFileDialog { Filter = "docx|*.docx" })
 			{
 				Dictionary<(int, int), int> rowMergeUnfo = new Dictionary<(int, int), int>();
-				rowMergeUnfo.Add((0, 0), 4);
-				rowMergeUnfo.Add((6, 1), 2);
+				rowMergeUnfo.Add((0, 0), 2);
 
-				string[][] headers = new string[2][];
-				headers[0] = new string[] { "Доставщик" };
-				headers[1] = new string[] { "ФИО", "Офис", "Номер" };
+				Queue<string> firstColumn = new Queue<string>();
+				firstColumn.Enqueue("Доставка");
+
+				Queue<string> secondColumn = new Queue<string>();
+				secondColumn.Enqueue("Фио");
+				secondColumn.Enqueue("Офис");
+				secondColumn.Enqueue("Номер");
+
+				Queue<string>[] headers = new Queue<string>[2];
+				headers[0] = firstColumn;
+				headers[1] = secondColumn;
 
 
 				if (dialog.ShowDialog() == DialogResult.OK)
 				{
-					WordTableComponent.CreateDoc(dialog.FileName, "Таблица", rowMergeUnfo);
+					WordTableComponent.CreateDoc(dialog.FileName, "Таблица", rowMergeUnfo, headers);
 
 					MessageBox.Show("Создание прошло успешно!", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				}

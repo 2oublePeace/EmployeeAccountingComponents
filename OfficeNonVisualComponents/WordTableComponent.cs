@@ -21,7 +21,7 @@ namespace OfficeNonVisualComponents
 			InitializeComponent();
 		}
 
-        public static void CreateDoc(string fileName, string title, Dictionary<(int, int), int> rowMergeInfo)
+        public static void CreateDoc(string fileName, string title, Dictionary<(int, int), int> rowMergeInfo, Queue<string>[] headers)
         {
             using (WordprocessingDocument wordDocument = WordprocessingDocument.Create(fileName, WordprocessingDocumentType.Document))
             {   
@@ -40,7 +40,7 @@ namespace OfficeNonVisualComponents
                     }
                 }));
 
-                Table table = CreateTable(10, 5, rowMergeInfo);
+                Table table = CreateTable(3, 4, rowMergeInfo, headers);
 
                 body.AppendChild(table);
             }
@@ -112,7 +112,7 @@ namespace OfficeNonVisualComponents
 			return null;
 		}
 
-		private static Table CreateTable(int rowCount, int columnCount, Dictionary<(int, int), int> rowMergeInfo)
+		private static Table CreateTable(int rowCount, int columnCount, Dictionary<(int, int), int> rowMergeInfo, Queue<string>[] headers)
 		{
             Table table = new Table();
 
@@ -131,80 +131,81 @@ namespace OfficeNonVisualComponents
 
 			TableRow[] tableRows = new TableRow[rowCount];
 			TableCell[] tableCells = new TableCell[columnCount];
-			int countMerge = 0;
-			int targetColumn = -1;
+
+			Dictionary<int?, int?> rowMerge = new Dictionary<int?, int?>();
 			for (int i = 0; i < tableRows.Length; i++)
 			{
 				tableRows[i] = new TableRow();
-				
+
 				for (int j = 0; j < tableCells.Length; j++)
 				{
 					tableCells[j] = new TableCell();
 
-					if(j == targetColumn && countMerge > 0)
+					if (j < 2)
 					{
-						tableCells[j].Append(new TableCellProperties(
-								new TableCellWidth() { Type = TableWidthUnitValues.Dxa, Width = "4800" },
-								new VerticalMerge { Val = MergedCellValues.Continue }));
-
-						tableCells[j].Append(new Paragraph(new Run(new Text("some text"))));
-
-						tableRows[i].Append(tableCells[j]);
-
-						countMerge--;
-						if(countMerge == 0)
+						bool skip = false;
+						foreach (var row in rowMergeInfo)
 						{
-							targetColumn = -1;
+							if (row.Key.Item1 == i && row.Key.Item2 == j)
+							{
+								rowMerge.Add(row.Key.Item2, row.Value);
+								tableCells[j].Append(new TableCellProperties(
+									new TableCellWidth() { Type = TableWidthUnitValues.Dxa, Width = "4800" },
+									new VerticalMerge { Val = MergedCellValues.Restart }));
+								tableCells[j].Append(new Paragraph(new Run(new Text(FillTableHead(j, headers[j])))));
+								skip = true;
+								break;
+							}
 						}
 
-						continue;
-					}
-
-					foreach (var rowInfo in rowMergeInfo)
-					{
-						if(rowInfo.Key.Item1 == i && rowInfo.Key.Item2 == j)
+						if(!skip)
 						{
-							countMerge = rowInfo.Value;
-							targetColumn = rowInfo.Key.Item2;
-
-							tableCells[j].Append(new TableCellProperties(
-								new TableCellWidth() { Type = TableWidthUnitValues.Dxa, Width = "4800" },
-								new VerticalMerge { Val = MergedCellValues.Restart }));
-							tableCells[j].Append(new Paragraph(new Run(new Text("some text"))));
-
-							continue;
+							if (rowMerge.ContainsKey(j) && rowMerge[j].Value > 0)
+							{
+								tableCells[j].Append(new TableCellProperties(
+									new TableCellWidth() { Type = TableWidthUnitValues.Dxa, Width = "4800" },
+									new VerticalMerge { Val = MergedCellValues.Continue }));
+								tableCells[j].Append(new Paragraph(new Run(new Text(FillTableHead(j, headers[j])))));
+								rowMerge[j]--;
+							}
+							else if (j == 0)
+							{
+								tableCells[j].Append(new TableCellProperties(
+									new TableCellWidth() { Type = TableWidthUnitValues.Dxa, Width = "4800" },
+									new HorizontalMerge { Val = MergedCellValues.Restart }));
+								tableCells[j].Append(new Paragraph(new Run(new Text(FillTableHead(j, headers[j])))));
+							}
+							else
+							{
+								tableCells[j].Append(new TableCellProperties(
+									new TableCellWidth() { Type = TableWidthUnitValues.Dxa, Width = "4800" },
+									new HorizontalMerge { Val = MergedCellValues.Continue }));
+								tableCells[j].Append(new Paragraph(new Run(new Text(FillTableHead(j, headers[j])))));
+							}
 						}
-					}
-
-					if(j == 0 && targetColumn != j)
-					{
-						tableCells[j].Append(new TableCellProperties(
-								new TableCellWidth() { Type = TableWidthUnitValues.Dxa, Width = "4800" },
-								new HorizontalMerge { Val = MergedCellValues.Restart }));
-						tableCells[j].Append(new Paragraph(new Run(new Text("some text"))));
-					}
-					else if(j == 1 && targetColumn != j)
-					{
-						tableCells[j].Append(new TableCellProperties(
-								new TableCellWidth() { Type = TableWidthUnitValues.Dxa, Width = "4800" },
-								new HorizontalMerge { Val = MergedCellValues.Continue }));
-						tableCells[j].Append(new Paragraph(new Run(new Text("some text"))));
 					} 
-					else if(targetColumn != j)
+					else
 					{
-						tableCells[j].Append(new TableCellProperties(
-								new TableCellWidth() { Type = TableWidthUnitValues.Dxa, Width = "4800" } ));
-						tableCells[j].Append(new Paragraph(new Run(new Text("some text"))));
+						tableCells[j].Append(new TableCellProperties(new TableCellWidth() { Type = TableWidthUnitValues.Dxa, Width = "4800" }));
+						tableCells[j].Append(new Paragraph(new Run(new Text())));
 					}
-
 					
 					tableRows[i].Append(tableCells[j]);
 				}
-
-				table.AppendChild(tableRows[i]);
+				table.Append(tableRows[i]);
 			}
 
 			return table;
         }
+
+		private static string FillTableHead(int index, Queue<string> headers)
+		{
+			if(headers.Count > 0)
+			{
+				return headers.Dequeue();
+			}
+
+			return string.Empty;
+		} 
     }
 }
