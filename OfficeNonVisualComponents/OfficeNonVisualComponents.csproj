@@ -34,8 +34,21 @@
     <Reference Include="DocumentFormat.OpenXml, Version=2.13.1.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
       <HintPath>..\packages\DocumentFormat.OpenXml.2.13.1\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
     </Reference>
+    <Reference Include="Syncfusion.Compression.Base, Version=19.3460.0.56, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Compression.Base.19.3.0.56\lib\net46\Syncfusion.Compression.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.DocIO.Base, Version=19.3460.0.56, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.DocIO.WinForms.19.3.0.56\lib\net46\Syncfusion.DocIO.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Licensing, Version=19.3460.0.56, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Licensing.19.3.0.56\lib\net46\Syncfusion.Licensing.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.OfficeChart.Base, Version=19.3460.0.56, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.OfficeChart.Base.19.3.0.56\lib\net46\Syncfusion.OfficeChart.Base.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -45,11 +58,19 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HelperModels\ChartDataInfo.cs" />
+    <Compile Include="HelperModels\ChartLegendPosition.cs" />
     <Compile Include="HelperModels\WordInfo.cs" />
     <Compile Include="HelperModels\WordParagraph.cs" />
     <Compile Include="HelperModels\WordParagraphProperties.cs" />
     <Compile Include="HelperModels\WordTextProperties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WordDiagramComponent.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="WordDiagramComponent.Designer.cs">
+      <DependentUpon>WordDiagramComponent.cs</DependentUpon>
+    </Compile>
     <Compile Include="WordImageComponent.cs">
       <SubType>Component</SubType>
     </Compile>

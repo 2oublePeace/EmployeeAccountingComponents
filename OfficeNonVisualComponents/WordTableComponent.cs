@@ -11,7 +11,7 @@ namespace OfficeNonVisualComponents
 {
 	public partial class WordTableComponent : Component
 	{
-		private const int countHeadersColumns = 2;
+		private static int countHeadersColumns;
 
 		public WordTableComponent()
 		{
@@ -28,7 +28,9 @@ namespace OfficeNonVisualComponents
         public static void CreateDoc<T>(string fileName, string title, Dictionary<(int, int), int> rowMergeInfo, Dictionary<int, int> rowHeightnfo,
 			Queue<KeyValuePair<string, string>>[] headers, List<T> deliveries)
         {
-            using (WordprocessingDocument wordDocument = WordprocessingDocument.Create(fileName, WordprocessingDocumentType.Document))
+			countHeadersColumns = headers.Length;
+
+			using (WordprocessingDocument wordDocument = WordprocessingDocument.Create(fileName, WordprocessingDocumentType.Document))
             {   
                 MainDocumentPart mainPart = wordDocument.AddMainDocumentPart();
  
@@ -45,11 +47,14 @@ namespace OfficeNonVisualComponents
                     }
                 }));
 
-				CheckEnterData(deliveries);
+				int rows = CheckEnterData(deliveries);
 
-                Table table = CreateTable(3, countHeadersColumns + deliveries.Count, rowMergeInfo, rowHeightnfo, headers, deliveries);
+				CheckHeadersFilling(rows, headers, rowMergeInfo);
+				CheckOverlayCells(rows, rowMergeInfo);
 
-                body.AppendChild(table);
+				Table table = CreateTable(rows, countHeadersColumns + deliveries.Count, rowMergeInfo, rowHeightnfo, headers, deliveries);
+
+				body.AppendChild(table);
             }
         }
 
@@ -242,7 +247,7 @@ namespace OfficeNonVisualComponents
 			return string.Empty;
 		}
 
-		private static void CheckEnterData<T>(List<T> deliveries)
+		private static int CheckEnterData<T>(List<T> deliveries)
 		{
 			Type type = typeof(T);
 			PropertyInfo[] properties = type.GetProperties();
@@ -255,6 +260,75 @@ namespace OfficeNonVisualComponents
 					{
 						throw new Exception("Свойство было NULL!");
 					}
+			
+				
+				}
+			}
+
+			return properties.Length;
+		}
+
+		private static void CheckHeadersFilling(int rows, Queue<KeyValuePair<string, string>>[] headers, Dictionary<(int, int), int> rowMergeInfo)
+		{
+			for(int i = 0; i < headers.Length; i++)
+			{
+				int cellsWithMerged = rows;
+				foreach(var row in rowMergeInfo)
+				{
+					if(row.Key.Item2 == i)
+					{
+						cellsWithMerged -= row.Value;
+					}
+				}
+
+				if(headers[i].Count != cellsWithMerged)
+				{
+					throw new Exception("Не заполнены заголовки!");
+				}
+			}
+		}
+
+		private static void CheckOverlayCells(int rows, Dictionary<(int, int), int> rowMergeInfo)
+		{
+			for(int i = 0; i < countHeadersColumns; i++)
+			{
+				int move = -1;
+				foreach(var row in rowMergeInfo)
+				{
+					if(row.Key.Item1 <= move)
+					{
+						throw new Exception("Наложение ячеек!");
+					}
+					if(row.Key.Item2 == i)
+					{
+						move = row.Key.Item1 + row.Value; 
+					}
+				}
+			}
+		}
+
+		private static void CheckRowsPropertyValues(int rows, Queue<KeyValuePair<string, string>>[] headers)
+		{
+			Dictionary<int, bool> rowValueDict = new Dictionary<int, bool>();
+			for(int row = 0; row < rows; rows++)
+			{
+				rowValueDict.Add(row, false);	
+			}
+
+			foreach(var header in headers)
+			{
+				int index = 0;
+				if(header.Dequeue().Value != null)
+				{
+					rowValueDict.Add(index++, true);
+				}
+			}
+
+			foreach(var row in rowValueDict.Values)
+			{
+				if(!row)
+				{
+					throw new Exception("К строке не назначено свойтство!");
 				}
 			}
 		}

@@ -103,7 +103,7 @@ namespace UserControlsApp
 			{
 				//Слияние ячеек
 				Dictionary<(int, int), int> rowMergeInfo = new Dictionary<(int, int), int>();
-				rowMergeInfo.Add((0, 0), 2);
+				rowMergeInfo.Add((0, 0), 1);
 
 				//Высота строк
 				Dictionary<int, int> rowHeightnfo = new Dictionary<int, int>();
@@ -127,12 +127,35 @@ namespace UserControlsApp
 				deliveries.Add(new Delivery { fullName = "Emiryan Vladimir", deliveryOffice = "Delivery", officePhoneNumber = "89175563364" });
 				deliveries.Add(new Delivery { fullName = "Frolov Rafael", deliveryOffice = "DHL", officePhoneNumber = "89174333162" });
 				deliveries.Add(new Delivery { fullName = "Ivan Ivanov", deliveryOffice = "Express", officePhoneNumber = "89605326654" });
-			
-
 
 				if (dialog.ShowDialog() == DialogResult.OK)
 				{
 					WordTableComponent.CreateDoc(dialog.FileName, "Таблица", rowMergeInfo, rowHeightnfo, headers, deliveries);
+
+					MessageBox.Show("Создание прошло успешно!", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				}
+				else
+				{
+					MessageBox.Show("Ошибка!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				}
+			}
+		}
+
+		private void buttonAddChart_Click(object sender, EventArgs e)
+		{
+			Dictionary<string, int> chartData = new Dictionary<string, int>();
+			chartData.Add("DHL", 32);
+			chartData.Add("Express", 22);
+			chartData.Add("CDEK", 44);
+
+			ChartDataInfo chartInfo = new ChartDataInfo() { Series = "Названия офисов", Data = chartData };
+			
+			using (var dialog = new SaveFileDialog { Filter = "docx|*.docx" })
+			{
+
+				if (dialog.ShowDialog() == DialogResult.OK)
+				{
+					WordDiagramComponent.CreateDoc(dialog.FileName, "Количество офисов доставки в городе", "Документ с диаграммой", chartInfo, ChartLegendPosition.Bottom);
 
 					MessageBox.Show("Создание прошло успешно!", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				}

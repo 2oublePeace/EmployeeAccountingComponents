@@ -39,14 +39,16 @@ namespace UserControlsApp
 			this.label2 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
 			this.groupBoxVisualComponents = new System.Windows.Forms.GroupBox();
+			this.groupBoxNonVisualComponents = new System.Windows.Forms.GroupBox();
+			this.buttonWordTable = new System.Windows.Forms.Button();
+			this.buttonWordImage = new System.Windows.Forms.Button();
 			this.checkedListBoxControl = new OfficeVisualComponent.CheckedListBoxControl();
 			this.treeViewControl = new OfficeVisualComponent.TreeViewControl();
 			this.numericControl = new OfficeVisualComponent.NumericUpDownControl();
-			this.groupBoxNonVisualComponents = new System.Windows.Forms.GroupBox();
-			this.buttonWordImage = new System.Windows.Forms.Button();
 			this.wordImageComponent = new OfficeNonVisualComponents.WordImageComponent(this.components);
 			this.wordTableComponent = new OfficeNonVisualComponents.WordTableComponent(this.components);
-			this.buttonWordTable = new System.Windows.Forms.Button();
+			this.wordDiagramComponent = new OfficeNonVisualComponents.WordDiagramComponent(this.components);
+			this.buttonAddChart = new System.Windows.Forms.Button();
 			this.groupBoxVisualComponents.SuspendLayout();
 			this.groupBoxNonVisualComponents.SuspendLayout();
 			this.SuspendLayout();
@@ -148,6 +150,38 @@ namespace UserControlsApp
 			this.groupBoxVisualComponents.TabStop = false;
 			this.groupBoxVisualComponents.Text = "Визуальные компоненты";
 			// 
+			// groupBoxNonVisualComponents
+			// 
+			this.groupBoxNonVisualComponents.Controls.Add(this.buttonAddChart);
+			this.groupBoxNonVisualComponents.Controls.Add(this.buttonWordTable);
+			this.groupBoxNonVisualComponents.Controls.Add(this.buttonWordImage);
+			this.groupBoxNonVisualComponents.Location = new System.Drawing.Point(372, 12);
+			this.groupBoxNonVisualComponents.Name = "groupBoxNonVisualComponents";
+			this.groupBoxNonVisualComponents.Size = new System.Drawing.Size(186, 306);
+			this.groupBoxNonVisualComponents.TabIndex = 13;
+			this.groupBoxNonVisualComponents.TabStop = false;
+			this.groupBoxNonVisualComponents.Text = "Невизуальные компоненты";
+			// 
+			// buttonWordTable
+			// 
+			this.buttonWordTable.Location = new System.Drawing.Point(7, 50);
+			this.buttonWordTable.Name = "buttonWordTable";
+			this.buttonWordTable.Size = new System.Drawing.Size(173, 23);
+			this.buttonWordTable.TabIndex = 1;
+			this.buttonWordTable.Text = "Добавить таблицу";
+			this.buttonWordTable.UseVisualStyleBackColor = true;
+			this.buttonWordTable.Click += new System.EventHandler(this.buttonWordTable_Click);
+			// 
+			// buttonWordImage
+			// 
+			this.buttonWordImage.Location = new System.Drawing.Point(7, 20);
+			this.buttonWordImage.Name = "buttonWordImage";
+			this.buttonWordImage.Size = new System.Drawing.Size(173, 23);
+			this.buttonWordImage.TabIndex = 0;
+			this.buttonWordImage.Text = "Добавить изображения";
+			this.buttonWordImage.UseVisualStyleBackColor = true;
+			this.buttonWordImage.Click += new System.EventHandler(this.buttonWordImage_Click);
+			// 
 			// checkedListBoxControl
 			// 
 			this.checkedListBoxControl.Location = new System.Drawing.Point(6, 40);
@@ -174,36 +208,15 @@ namespace UserControlsApp
 			this.numericControl.TabIndex = 2;
 			this.numericControl.Value = null;
 			// 
-			// groupBoxNonVisualComponents
+			// buttonAddChart
 			// 
-			this.groupBoxNonVisualComponents.Controls.Add(this.buttonWordTable);
-			this.groupBoxNonVisualComponents.Controls.Add(this.buttonWordImage);
-			this.groupBoxNonVisualComponents.Location = new System.Drawing.Point(372, 12);
-			this.groupBoxNonVisualComponents.Name = "groupBoxNonVisualComponents";
-			this.groupBoxNonVisualComponents.Size = new System.Drawing.Size(186, 306);
-			this.groupBoxNonVisualComponents.TabIndex = 13;
-			this.groupBoxNonVisualComponents.TabStop = false;
-			this.groupBoxNonVisualComponents.Text = "Невизуальные компоненты";
-			// 
-			// buttonWordImage
-			// 
-			this.buttonWordImage.Location = new System.Drawing.Point(7, 20);
-			this.buttonWordImage.Name = "buttonWordImage";
-			this.buttonWordImage.Size = new System.Drawing.Size(173, 23);
-			this.buttonWordImage.TabIndex = 0;
-			this.buttonWordImage.Text = "Добавить изображения";
-			this.buttonWordImage.UseVisualStyleBackColor = true;
-			this.buttonWordImage.Click += new System.EventHandler(this.buttonWordImage_Click);
-			// 
-			// buttonWordTable
-			// 
-			this.buttonWordTable.Location = new System.Drawing.Point(7, 50);
-			this.buttonWordTable.Name = "buttonWordTable";
-			this.buttonWordTable.Size = new System.Drawing.Size(173, 23);
-			this.buttonWordTable.TabIndex = 1;
-			this.buttonWordTable.Text = "Добавить таблицу";
-			this.buttonWordTable.UseVisualStyleBackColor = true;
-			this.buttonWordTable.Click += new System.EventHandler(this.buttonWordTable_Click);
+			this.buttonAddChart.Location = new System.Drawing.Point(7, 80);
+			this.buttonAddChart.Name = "buttonAddChart";
+			this.buttonAddChart.Size = new System.Drawing.Size(173, 23);
+			this.buttonAddChart.TabIndex = 2;
+			this.buttonAddChart.Text = "Добавить диаграмму";
+			this.buttonAddChart.UseVisualStyleBackColor = true;
+			this.buttonAddChart.Click += new System.EventHandler(this.buttonAddChart_Click);
 			// 
 			// FormMain
 			// 
@@ -240,6 +253,8 @@ namespace UserControlsApp
 		private System.Windows.Forms.Button buttonWordImage;
 		private OfficeNonVisualComponents.WordTableComponent wordTableComponent;
 		private System.Windows.Forms.Button buttonWordTable;
+		private System.Windows.Forms.Button buttonAddChart;
+		private OfficeNonVisualComponents.WordDiagramComponent wordDiagramComponent;
 	}
 }
 
