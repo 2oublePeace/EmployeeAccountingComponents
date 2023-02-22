@@ -4,36 +4,57 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace UserControlsApp
 {
 	public partial class FormMain : Form
 	{
+		private readonly List<Delivery> _deliveries; 
 		public FormMain()
 		{
 			InitializeComponent();
 
-			Delivery delivery = new Delivery();
-			treeViewControl.SetHierarchy(new List<string> { "fullName", "deliveryOffice", "officePhoneNumber" });
-			treeViewControl.Add(
-				new Delivery { 
-					fullName = "Emiryan Vladimir", 
-					deliveryOffice = "Delivery",
-					officePhoneNumber = "89175563364"
-				},
-				""
-			);
-
-			treeViewControl.Add(
+			_deliveries = new List<Delivery>()
+			{
 				new Delivery
 				{
 					fullName = "Emiryan Vladimir",
-					deliveryOffice = "Delivery",
-					officePhoneNumber = "89175567864"
+					deliveryOffice = "DHL",
+					officePhoneNumber = "89962847821"
 				},
-				""
-			);
+				new Delivery
+				{
+					fullName = "Ivanov Ivan",
+					deliveryOffice = "Union",
+					officePhoneNumber = "89175563364"
+				},
+				new Delivery
+				{
+					fullName = "Ivanov Ivan",
+					deliveryOffice = "Union",
+					officePhoneNumber = "89175563364"
+				},
+				new Delivery
+				{
+					fullName = "Ivanov Ivan",
+					deliveryOffice = "Union",
+					officePhoneNumber = "89175563364"
+				},
+				new Delivery
+				{
+					fullName = "Ivanov Ivan",
+					deliveryOffice = "Union",
+					officePhoneNumber = "89175563364"
+				}
+			};
+			
+			treeViewControl.SetHierarchy(new List<string> { "fullName", "deliveryOffice", "officePhoneNumber" });
+			foreach (var delivery in _deliveries)
+			{
+				treeViewControl.Add(delivery, "");
+			}
 
 			checkedListBoxControl.Items.Add("string1");
 			checkedListBoxControl.Items.Add("string2");
@@ -103,35 +124,38 @@ namespace UserControlsApp
 			{
 				//Слияние ячеек
 				Dictionary<(int, int), int> rowMergeInfo = new Dictionary<(int, int), int>();
-				rowMergeInfo.Add((0, 0), 1);
+				rowMergeInfo.Add((0, 0), 2);
 
 				//Высота строк
-				Dictionary<int, int> rowHeightnfo = new Dictionary<int, int>();
-				rowHeightnfo.Add(2, 2000);
+				Dictionary<int, int> rowHeightInfo = new Dictionary<int, int>();
+				rowHeightInfo.Add(0, 1000);
+				rowHeightInfo.Add(1, 1000);
+				rowHeightInfo.Add(2, 1000);
 
 				//Заголовки и присущие строкам данные
-				Queue<KeyValuePair<string, string>> firstColumn = new Queue<KeyValuePair<string, string>>();
-				firstColumn.Enqueue(new KeyValuePair<string, string>("Доставка", null));
-
-				Queue<KeyValuePair<string, string>> secondColumn = new Queue<KeyValuePair<string, string>>();
-				secondColumn.Enqueue(new KeyValuePair<string, string>("ФИО", "fullName"));
-				secondColumn.Enqueue(new KeyValuePair<string, string>("Офис", "deliveryOffice"));
-				secondColumn.Enqueue(new KeyValuePair<string, string>("Номер", "officePhoneNumber"));
-
-				Queue<KeyValuePair<string, string>>[] headers = new Queue<KeyValuePair<string, string>>[2];
-				headers[0] = firstColumn;
-				headers[1] = secondColumn;
-
-				//Данные для таблицы
-				List<Delivery> deliveries = new List<Delivery>();
-				deliveries.Add(new Delivery { fullName = "Emiryan Vladimir", deliveryOffice = "Delivery", officePhoneNumber = "89175563364" });
-				deliveries.Add(new Delivery { fullName = "Frolov Rafael", deliveryOffice = "DHL", officePhoneNumber = "89174333162" });
-				deliveries.Add(new Delivery { fullName = "Ivan Ivanov", deliveryOffice = "Express", officePhoneNumber = "89605326654" });
-
+				List<Queue<KeyValuePair<string, string>>> headers = new List<Queue<KeyValuePair<string, string>>>();
+				headers.Add(
+					new Queue<KeyValuePair<string, string>>(
+						new List<KeyValuePair<string, string>>
+						{
+							new KeyValuePair<string, string>("Доставка", "Deliveries")
+						}
+					)
+				);
+				headers.Add(
+					new Queue<KeyValuePair<string, string>>(
+						new List<KeyValuePair<string, string>>
+						{
+							new KeyValuePair<string, string>("ФИО", "fullName"),
+							new KeyValuePair<string, string>("Офис", "deliveryOffice"),
+							new KeyValuePair<string, string>("Номер", "officePhoneNumber")
+						}
+					)
+				);
+				
 				if (dialog.ShowDialog() == DialogResult.OK)
 				{
-					WordTableComponent.CreateDoc(dialog.FileName, "Таблица", rowMergeInfo, rowHeightnfo, headers, deliveries);
-
+					WordTableComponent.CreateDoc(dialog.FileName, "Таблица", rowMergeInfo, headers, _deliveries, rowHeightInfo);
 					MessageBox.Show("Создание прошло успешно!", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				}
 				else
