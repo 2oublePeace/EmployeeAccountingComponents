@@ -8,10 +8,11 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>UserControlsApp</RootNamespace>
     <AssemblyName>UserControlsApp</AssemblyName>
-    <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -46,7 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Delivery.cs" />
+    <Compile Include="Employee.cs" />
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -66,6 +67,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -81,13 +83,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OfficeNonVisualComponents\OfficeNonVisualComponents.csproj">
+    <ProjectReference Include="..\EmployeeNonVisualComponents\EmployeeNonVisualComponents.csproj">
       <Project>{22326EFF-8380-4E17-9B73-7D3FACCBEF42}</Project>
-      <Name>OfficeNonVisualComponents</Name>
+      <Name>EmployeeNonVisualComponents</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OfficeVisualComponent\OfficeVisualComponent.csproj">
+    <ProjectReference Include="..\EmployeeVisualComponent\EmployeeVisualComponent.csproj">
       <Project>{5AC2014F-C4C0-4AB3-8F64-B4395B3E8BFD}</Project>
-      <Name>OfficeVisualComponent</Name>
+      <Name>EmployeeVisualComponent</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

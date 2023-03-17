@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace UserControlsApp
 {
-	public class Delivery
+	public class Employee
 	{
-		public string fullName { get; set; }
-		public string deliveryOffice { get; set; }
-		public string officePhoneNumber { get; set; }
+		public string FullName { get; set; }
+		public string Skill { get; set; }
+		public string PhoneNumber { get; set; }
 	}
 }

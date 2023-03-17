@@ -11,46 +11,46 @@ namespace UserControlsApp
 {
 	public partial class FormMain : Form
 	{
-		private readonly List<Delivery> _deliveries; 
+		private readonly List<Employee> _deliveries; 
 		public FormMain()
 		{
 			InitializeComponent();
 
-			_deliveries = new List<Delivery>()
+			_deliveries = new List<Employee>()
 			{
-				new Delivery
+				new Employee
 				{
-					fullName = "Emiryan Vladimir",
-					deliveryOffice = "DHL",
-					officePhoneNumber = "89962847821"
+					FullName = "Зайцев Андрей",
+					Skill = "Адаптируемость",
+					PhoneNumber = "89962847821"
 				},
-				new Delivery
+				new Employee
 				{
-					fullName = "Ivanov Ivan",
-					deliveryOffice = "Union",
-					officePhoneNumber = "89175563364"
+					FullName = "Петров Иван",
+					Skill = "Лидерство",
+					PhoneNumber = "89175563364"
 				},
-				new Delivery
+				new Employee
 				{
-					fullName = "Ivanov Ivan",
-					deliveryOffice = "Union",
-					officePhoneNumber = "89175563364"
+					FullName = "Дьяченко Павел",
+					Skill = "Адаптируемость",
+					PhoneNumber = "89175563364"
 				},
-				new Delivery
+				new Employee
 				{
-					fullName = "Ivanov Ivan",
-					deliveryOffice = "Union",
-					officePhoneNumber = "89175563364"
+					FullName = "Иванов Петр",
+					Skill = "Коммуникативность",
+					PhoneNumber = "89175563364"
 				},
-				new Delivery
+				new Employee
 				{
-					fullName = "Ivanov Ivan",
-					deliveryOffice = "Union",
-					officePhoneNumber = "89175563364"
+					FullName = "Кротов Егор",
+					Skill = "Адаптируемость",
+					PhoneNumber = "89175563364"
 				}
 			};
 			
-			treeViewControl.SetHierarchy(new List<string> { "fullName", "deliveryOffice", "officePhoneNumber" });
+			treeViewControl.SetHierarchy(new List<string> { "FullName", "Skill", "PhoneNumber" });
 			foreach (var delivery in _deliveries)
 			{
 				treeViewControl.Add(delivery, "");
@@ -77,7 +77,7 @@ namespace UserControlsApp
 
 		private void buttonGetSelectedValue_Click(object sender, EventArgs e)
 		{
-			Console.WriteLine(treeViewControl.GetSelectedValue<Delivery>());
+			Console.WriteLine(treeViewControl.GetSelectedValue<Employee>());
 		}
 
 		private void buttonGetSelectedIndex_Click(object sender, EventArgs e)
@@ -146,16 +146,16 @@ namespace UserControlsApp
 					new Queue<KeyValuePair<string, string>>(
 						new List<KeyValuePair<string, string>>
 						{
-							new KeyValuePair<string, string>("ФИО", "fullName"),
-							new KeyValuePair<string, string>("Офис", "deliveryOffice"),
-							new KeyValuePair<string, string>("Номер", "officePhoneNumber")
+							new KeyValuePair<string, string>("ФИО", "FullName"),
+							new KeyValuePair<string, string>("Навык", "Skill"),
+							new KeyValuePair<string, string>("Номер", "PhoneNumber")
 						}
 					)
 				);
 				
 				if (dialog.ShowDialog() == DialogResult.OK)
 				{
-					WordTableComponent.CreateDoc(dialog.FileName, "Таблица", rowMergeInfo, headers, _deliveries, rowHeightInfo);
+					WordTableComponent.CreateDoc(dialog.FileName, "Сотрудники", rowMergeInfo, headers, _deliveries, rowHeightInfo);
 					MessageBox.Show("Создание прошло успешно!", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				}
 				else
@@ -168,18 +168,18 @@ namespace UserControlsApp
 		private void buttonAddChart_Click(object sender, EventArgs e)
 		{
 			Dictionary<string, int> chartData = new Dictionary<string, int>();
-			chartData.Add("DHL", 32);
-			chartData.Add("Express", 22);
-			chartData.Add("CDEK", 44);
+			chartData.Add("Адаптируемость", 32);
+			chartData.Add("Коммуникативность", 22);
+			chartData.Add("Лидерство", 44);
 
-			ChartDataInfo chartInfo = new ChartDataInfo() { Series = "Названия офисов", Data = chartData };
+			ChartDataInfo chartInfo = new ChartDataInfo() { Series = "Навыки", Data = chartData };
 			
 			using (var dialog = new SaveFileDialog { Filter = "docx|*.docx" })
 			{
 
 				if (dialog.ShowDialog() == DialogResult.OK)
 				{
-					WordDiagramComponent.CreateDoc(dialog.FileName, "Количество офисов доставки в городе", "Документ с диаграммой", chartInfo, ChartLegendPosition.Bottom);
+					WordDiagramComponent.CreateDoc(dialog.FileName, "Количество сотрудников по навыкам", "Документ с диаграммой", chartInfo, ChartLegendPosition.Bottom);
 
 					MessageBox.Show("Создание прошло успешно!", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				}
